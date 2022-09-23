@@ -88,7 +88,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.42114258, y: -37.68901}
@@ -117,4 +117,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectDrag: {fileID: 999249674601332689, guid: 2c968069d94fdde479c5cba065038dd8, type: 3}
-  objectGame: {fileID: 999249674601332689, guid: 835970daed0ec334590eb4ab6ae99b59, type: 3}
+  objectGame: {fileID: 5571273722534333765, guid: d06b629e111adb940bf8be60fe524192, type: 3}
+  canvas: {fileID: 0}

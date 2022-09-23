@@ -13,7 +13,11 @@ public class EnemySpawner : MonoBehaviour
         {
             if (!enemy.isSpawned && enemy.spawnerTime <= Time.time)
             {
-                Instantiate(enemyPrefab, transform.GetChild(enemy.Spawner).transform);
+                if(enemy.randomSpawn) {
+                    enemy.Spawner = Random.Range(0, transform.childCount);
+                }
+                GameObject enemyInstance = Instantiate(enemyPrefab, transform.GetChild(enemy.Spawner).transform);
+                transform.GetChild(enemy.Spawner).GetComponent<SpawnPoint>().enemies.Add(enemyInstance);
                 enemy.isSpawned = true;
             }
         }

@@ -13,13 +13,17 @@ public class ObjectCard : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoi
     private GameManager gameManager;
     public void OnDrag(PointerEventData eventData)
     {
-        objectDragInstance.transform.position = Input.mousePosition;
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = Camera.main.transform.position.z + Camera.main.nearClipPlane;
+        objectDragInstance.transform.position = mousePosition;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         objectDragInstance = Instantiate(objectDrag, canvas.transform);
-        objectDragInstance.transform.position = Input.mousePosition;
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition.z = Camera.main.transform.position.z + Camera.main.nearClipPlane;
+        objectDragInstance.transform.position = mousePosition;
         objectDragInstance.GetComponent<ObjectDragging>().card = this;
 
         gameManager.draggingObject = objectDragInstance;
