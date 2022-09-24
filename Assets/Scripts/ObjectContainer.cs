@@ -17,7 +17,7 @@ public class ObjectContainer : MonoBehaviour
     {
         if (gameManager.draggingObject != null && !isFull)
         {
-            gameManager.currentContainter = this.gameObject;
+            gameManager.currentContainter = gameObject;
             backgroundImage.enabled = true;
         }
     }

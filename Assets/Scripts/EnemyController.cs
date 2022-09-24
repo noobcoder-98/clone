@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -10,7 +11,7 @@ public class EnemyController : MonoBehaviour
     public float damageCooldown;
 
     private bool isStopped;
-
+    Animator animator;
     public void ReceiveDamge(int damage) {
         if (health - damage <= 0) {
             transform.parent.GetComponent<SpawnPoint>().enemies.Remove(gameObject);
@@ -23,7 +24,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -35,20 +36,45 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.gameObject.layer == 8) {
-            StartCoroutine(Attack(collision));
+            animator.SetBool("Attack", true);
+            StartCoroutine(AttackObject(collision));
+            isStopped = true;
+        } else if (collision.gameObject.layer == 11){
+            animator.SetBool("Attack", true);
+            StartCoroutine(AttackPlayer(collision));
             isStopped = true;
         }
     }
 
-    IEnumerator Attack(Collider2D collision) {
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.gameObject.layer == 11) {
+            StopCoroutine(AttackPlayer(collision));
+            animator.SetBool("Attack", false);
+            isStopped = false;
+        }
+    }
+
+    IEnumerator AttackPlayer(Collider2D collision) {
         if (collision == null) {
             isStopped = false;
+            animator.SetBool("Attack", false);
+        } else {
+            collision.gameObject.GetComponent<PlayerController>().ReceiveDamge(damage);
+            yield return new WaitForSeconds(damageCooldown);
+            StartCoroutine(AttackPlayer(collision));
+        }
+
+    }
+
+    IEnumerator AttackObject(Collider2D collision) {
+        if (collision == null) {
+            isStopped = false;
+            animator.SetBool("Attack", false);
         } else {
             collision.gameObject.GetComponent<WallController>().ReceiveDamge(damage);
             yield return new WaitForSeconds(damageCooldown);
-            StartCoroutine(Attack(collision));
+            StartCoroutine(AttackObject(collision));
         }
         
     }
-
 }
