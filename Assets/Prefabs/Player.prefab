@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 500
+  attackCooldown: 0.2
   spear: {fileID: 4333152233172673139, guid: 582fb9674b32d114892861030be5e690, type: 3}
   health: 200
 --- !u!61 &9032778911596708515

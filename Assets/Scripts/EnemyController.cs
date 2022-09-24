@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     public float damageCooldown;
 
     private bool isStopped;
+    private bool isCollided;
     Animator animator;
     public void ReceiveDamge(int damage) {
         if (health - damage <= 0) {
@@ -40,6 +41,7 @@ public class EnemyController : MonoBehaviour
             StartCoroutine(AttackObject(collision));
             isStopped = true;
         } else if (collision.gameObject.layer == 11){
+            isCollided = true;
             animator.SetBool("Attack", true);
             StartCoroutine(AttackPlayer(collision));
             isStopped = true;
@@ -48,6 +50,7 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.layer == 11) {
+            isCollided = false;
             StopCoroutine(AttackPlayer(collision));
             animator.SetBool("Attack", false);
             isStopped = false;
@@ -59,6 +62,8 @@ public class EnemyController : MonoBehaviour
             isStopped = false;
             animator.SetBool("Attack", false);
         } else {
+            if (!isCollided)
+                yield break;
             collision.gameObject.GetComponent<PlayerController>().ReceiveDamge(damage);
             yield return new WaitForSeconds(damageCooldown);
             StartCoroutine(AttackPlayer(collision));

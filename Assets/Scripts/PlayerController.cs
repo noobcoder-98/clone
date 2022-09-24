@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 3.0f;
+    public float attackCooldown = 1.0f;
     public GameObject spear;
     public int health = 200;
 
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
     Vector2 lookDirection = new Vector2(1, 0);
     float horizontal;
     float vertical;
-
+    float cooldown;
     public void ReceiveDamge(int damage) {
         if (health - damage <= 0) {
             Destroy(gameObject);
@@ -28,12 +29,13 @@ public class PlayerController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
+        cooldown = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        cooldown += Time.deltaTime;
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         Vector2 move = new Vector2(horizontal, 0);
@@ -45,8 +47,9 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("Look Y", lookDirection.y);
         animator.SetFloat("Speed", move.magnitude);
 
-        if (Input.GetKeyDown(KeyCode.S)) {
+        if (Input.GetKeyDown(KeyCode.S) && cooldown >= attackCooldown) {
             Launch();
+            cooldown = 0;
         }
 
     }
